@@ -1,0 +1,343 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+    overflow-x: hidden;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+body {
+    background-color: #141414;
+    overflow-y: scroll;
+}
+
+:root {
+    --header-height: 68px;
+    --header-max-height: calc(100vh - 218px)
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+nav.header {
+    background-color: rgb(20, 20, 20);
+    height: 68px;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+}
+
+nav.header ul {
+    display: flex;
+    align-items: center;
+    padding: 0 60px 0 0;
+}
+
+nav.header ul li.logo img {
+    height: 32px;
+    width: auto;
+    margin-right: 20px;
+}
+
+nav.header ul li {
+    font-size: 1.2em;
+    color: #fff;
+    margin-right: 20px;
+}
+
+nav.header ul li a {
+    color: #fff;
+    cursor: pointer;
+}
+
+header {
+    display: flex;
+    max-height: var(--header-max-height);
+    height: calc(56.25vw);
+    color: #fff;
+    align-items: center;
+}
+
+header section {
+    width: 36%;
+}
+
+h1 {
+    font-size: 4.2vw;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    font-weight: 500;
+}
+
+p.numero-1 {
+    font-size: 1.6vw;
+    margin: 20px 0;
+}
+
+.info-film p.description {
+    font-size: 1.4vw;
+    margin: 20px 0;
+}
+
+button.more {
+    border: 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    font-size: 1.6vw;
+    font-weight: bold;
+    line-height: 2.4vw;
+    padding: 0.6rem 1.6vw;
+    margin-top: 50px;
+}
+
+.carousel {
+    display: flex;
+    width: 100%;
+}
+
+button.more:hover {
+    background-color: #ffffffad;
+}
+
+button.more span {
+    display: block;
+}
+
+button.more svg {
+    display: block;
+    height: 2vw;
+    width: 2vw;
+    margin-right: 10px;
+}
+
+.categories-movies{
+    display: grid;
+    grid-template-columns: repeat(5, calc(100% - 40px));
+    z-index: 0;
+    column-gap: 20px;
+    position: relative;
+    width: calc(100vw - 47px - 47px - 15px);
+}
+
+.categories-movies > div{
+    display: grid;
+    transform: translateX(calc(-200% - 20px));
+    grid-template-columns: repeat(1, 1fr);
+    column-gap: 20px;
+    overflow-x: hidden;
+}
+
+.carousel-active-right{
+    animation: slide-right 800ms;
+    animation-fill-mode: forwards;
+}
+
+.carousel-active-left{
+    animation: slide-left 800ms;
+    animation-fill-mode: forwards;
+}
+
+.carousel button {
+    width: 60px;
+    position: relative;
+    transition-duration: 150ms;
+    border: 0;
+    z-index: 50;
+    padding: 0;
+}
+
+.carousel button.left {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+    border-radius: 0 5px 5px 0;
+}
+
+.carousel button.right {
+    background: linear-gradient(to left, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+    border-radius: 5px 0 0 5px;
+}
+
+.carousel button .hover {
+    display: none;
+    position: relative;
+}
+
+.carousel button:hover .hover {
+    display: block;
+    position: relative;
+    left: 14px;
+}
+
+.carousel button:hover .classique {
+    display: none;
+}
+
+.carousel button:hover {
+    background-color: rgba(0, 0, 0, 0.815);
+    cursor: pointer;
+    transition-duration: 300ms;
+}
+
+.categories-movies .movie {
+    width: 100%;
+    height: auto;
+}
+
+.categories-movies .movie img {
+    width: 100%;
+    height: auto;
+}
+
+main {
+    width: calc(100vw - 15px);
+}
+
+.next-div {
+    display: block;
+}
+
+@keyframes slide-right {
+    to {
+        transform: translateX(calc(-100% + 20px));
+    }
+}
+@keyframes slide-left {
+    to {
+        transform: translateX(calc(100% - 20px));
+    }
+}
