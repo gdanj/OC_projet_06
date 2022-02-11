@@ -373,7 +373,7 @@ main section{
 
 .movie:hover{
     cursor: pointer;
-    transition-duration: 400ms;
+    transition-duration: 300ms;
     transform: scale(1.03);
     animation-fill-mode: backwards;
 }

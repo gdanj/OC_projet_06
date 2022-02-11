@@ -47,6 +47,7 @@ class Carousel {
       if (this.tabResultApi[boocle]) {
         let img = document.createElement('img')
         img.setAttribute('src', this.tabResultApi[boocle]['image_url'])
+        img.setAttribute('data-movie', this.tabResultApi[boocle]['id'])
         img.classList.add(`${boocle}`)
         tabDiv[j].insertAdjacentHTML('beforeend', img.outerHTML)
       }
@@ -154,8 +155,8 @@ for (let elem of categoriesAll) {
   let sliderMovies
   if (i === 1) {
     sliderMovies = new Carousel(i, "http://localhost:8000/api/v1/titles/?sort_by=-imdb_score")
-  }else{
-    sliderMovies = new Carousel(i, `http://localhost:8000/api/v1/titles/?genre=${elem.id}`)
+  } else {
+    sliderMovies = new Carousel(i, `http://localhost:8000/api/v1/titles/?genre=${elem.id}&min_year=2015`)
   }
   sliderMovies.eventCarrossel()
   i++
