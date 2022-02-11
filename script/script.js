@@ -1,20 +1,20 @@
 class Carousel {
-  constructor() {
+  constructor(nbr, url) {
     this.nextUrl = {
-      "url": "http://localhost:8000/api/v1/titles/?sort_by=-imdb_score"
+      "url": url
     }
-    this.buttonRight = document.querySelector("body > main > section:nth-child(1) > div > button.right")
-    this.buttonLeft = document.querySelector("body > main > section:nth-child(1) > div > button.left")
-    this.categoriesDiv = document.querySelector("body > main > section:nth-child(1) .categories-movies")
+    this.buttonRight = document.querySelector(`body > main > section:nth-child(${nbr}) > div > button.right`)
+    this.buttonLeft = document.querySelector(`body > main > section:nth-child(${nbr}) > div > button.left`)
+    this.categoriesDiv = document.querySelector(`body > main > section:nth-child(${nbr}) .categories-movies`)
     this.tabUrl = []
     this.tabResultApi = []
     this.currentPosition = 0
     this.maxPosition = 19
-    this.moviesDiv1 = document.querySelector("body > main > section:nth-child(1) > div .moviesDiv1")
-    this.moviesDiv2 = document.querySelector("body > main > section:nth-child(1) > div .moviesDiv2")
-    this.moviesDiv3 = document.querySelector("body > main > section:nth-child(1) > div .moviesDiv3")
-    this.moviesDiv4 = document.querySelector("body > main > section:nth-child(1) > div .moviesDiv4")
-    this.moviesDiv5 = document.querySelector("body > main > section:nth-child(1) > div .moviesDiv5")
+    this.moviesDiv1 = document.querySelector(`body > main > section:nth-child(${nbr}) > div .moviesDiv1`)
+    this.moviesDiv2 = document.querySelector(`body > main > section:nth-child(${nbr}) > div .moviesDiv2`)
+    this.moviesDiv3 = document.querySelector(`body > main > section:nth-child(${nbr}) > div .moviesDiv3`)
+    this.moviesDiv4 = document.querySelector(`body > main > section:nth-child(${nbr}) > div .moviesDiv4`)
+    this.moviesDiv5 = document.querySelector(`body > main > section:nth-child(${nbr}) > div .moviesDiv5`)
     this.categories_movies_nbr_columns = 2
   }
   async xhrApiMovie(url) {
@@ -121,32 +121,42 @@ class Carousel {
     this.categoriesDiv.classList.remove("carousel-active-left")
   }
 
-  waitAnimation(){
-    const mmm = setTimeout(() => test1.remouveClass(), 800)
+  waitAnimation() {
+    const mmm = setTimeout(() => this.remouveClass(), 800)
   }
 
   eventCarrossel = () => {
-    test1.buttonRight.addEventListener('click', function () {
-      if (!((test1.categoriesDiv.classList.contains("carousel-active-right") || test1.categoriesDiv.classList.contains("carousel-active-left")))) {
-        test1.categoriesDiv.classList.add("carousel-active-right")
-        test1.currentPosition += test1.moviesDiv3.querySelectorAll('div').length
-        test1.waitAnimation()
+    this.buttonRight.addEventListener('click', () => {
+      if (!((this.categoriesDiv.classList.contains("carousel-active-right") || this.categoriesDiv.classList.contains("carousel-active-left")))) {
+        this.categoriesDiv.classList.add("carousel-active-right")
+        this.currentPosition += this.moviesDiv3.querySelectorAll('div').length
+        this.waitAnimation()
       }
     })
-    
-    test1.buttonLeft.addEventListener('click', function () {
-      if (!((test1.categoriesDiv.classList.contains("carousel-active-right") || test1.categoriesDiv.classList.contains("carousel-active-left")))) {
-        test1.categoriesDiv.classList.add("carousel-active-left")
-        test1.currentPosition -= test1.moviesDiv3.querySelectorAll('div').length
-        test1.waitAnimation()
+
+    this.buttonLeft.addEventListener('click', () => {
+      if (!((this.categoriesDiv.classList.contains("carousel-active-right") || this.categoriesDiv.classList.contains("carousel-active-left")))) {
+        this.categoriesDiv.classList.add("carousel-active-left")
+        this.currentPosition -= this.moviesDiv3.querySelectorAll('div').length
+        this.waitAnimation()
       }
     })
-    test1.resizeDivMovies()
-    window.addEventListener('resize', function () {
-      test1.resizeDivMovies()
+    this.resizeDivMovies()
+    window.addEventListener('resize', () => {
+      this.resizeDivMovies()
     })
   }
 }
 
-test1 = new Carousel()
-test1.eventCarrossel()
+categoriesAll = document.querySelectorAll(".categories-movies")
+let i = 1
+for (let elem of categoriesAll) {
+  let sliderMovies
+  if (i === 1) {
+    sliderMovies = new Carousel(i, "http://localhost:8000/api/v1/titles/?sort_by=-imdb_score")
+  }else{
+    sliderMovies = new Carousel(i, `http://localhost:8000/api/v1/titles/?genre=${elem.id}`)
+  }
+  sliderMovies.eventCarrossel()
+  i++
+}
