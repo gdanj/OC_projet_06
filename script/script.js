@@ -161,3 +161,4 @@ for (let elem of categoriesAll) {
   sliderMovies.eventCarrossel()
   i++
 }
+
