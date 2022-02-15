@@ -22,10 +22,24 @@ class Carousel {
       return false
     }
     this.tabUrl.push(url)
-    let response = await fetch(url)
+    let response = await fetch(url).then()
     let apiMovie = await response.json()
     this.nextUrl["url"] = apiMovie['next']
     return apiMovie['results']
+  }
+
+  async addText(elem, modal_container) {
+    let tab = ["title", "year", "duration", "imdb_score", "votes", "original_title", "countries", "genres", "actors", "description", "directors", "writers", "company", "languages"]
+    await fetch(`http://localhost:8000/api/v1/titles/${elem.dataset["movie"]}`).then(dataJson => {
+      dataJson.json().then(data => {
+        console.log(data)
+        for (let classs of tab) {
+          let element = modal_container.querySelector(`.modal .${classs}`)
+          element.innerText = data[classs]
+        }
+        modal_container.querySelector(`img`).setAttribute('src', data["image_url"])
+      })
+    })
   }
 
   async addDivInHtml(i, tabDiv) {
@@ -48,8 +62,13 @@ class Carousel {
         let img = document.createElement('img')
         img.setAttribute('src', this.tabResultApi[boocle]['image_url'])
         img.setAttribute('data-movie', this.tabResultApi[boocle]['id'])
-        img.classList.add(`${boocle}`)
-        tabDiv[j].insertAdjacentHTML('beforeend', img.outerHTML)
+        img.classList.add('moldal-trigger')
+        let modal_container = document.querySelector(".modal-container")
+        img.addEventListener("click", (e) => {
+          this.addText(e.target, modal_container)
+          modal_container.classList.toggle("active")
+        })
+        tabDiv[j].insertAdjacentElement('beforeend', img)
       }
       j++
     }
@@ -149,6 +168,12 @@ class Carousel {
   }
 }
 
+let modal_container = document.querySelector(".modal-container")
+let modal_trigger = document.querySelectorAll(".modal-trigger")
+modal_trigger.forEach(elem => elem.addEventListener("click", () => {
+  modal_container.classList.toggle("active")
+}))
+
 categoriesAll = document.querySelectorAll(".categories-movies")
 let i = 1
 for (let elem of categoriesAll) {
@@ -161,4 +186,3 @@ for (let elem of categoriesAll) {
   sliderMovies.eventCarrossel()
   i++
 }
-

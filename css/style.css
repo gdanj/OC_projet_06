@@ -383,6 +383,14 @@ main section{
 .modal-container{
     height: 100vh;
     width: 100vw;
+    position: fixed;
+    display: none;
+    z-index: 9998;
+}
+
+.modal-container .poster{
+    display: flex;
+    place-content: center;
 }
 
 .modal{
@@ -395,10 +403,13 @@ main section{
     transform: translate(-50%, calc(-50% ));
     margin: 50px;
     padding: 50px;
+    z-index: 9999;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .modal h2 {
-    font-size: 4.2vw;
+    font-size: 3vw;
     text-transform: uppercase;
     margin-bottom: 40px;
     font-weight: 500;
@@ -409,8 +420,14 @@ main section{
     grid-template-columns: repeat(2, 50%);
 }
 
+.info-principale{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
 .modal .premiere p{
-    font-size: 1.7vw;
+    font-size: 1.7em;
     font-weight: 500;
 }
 
@@ -446,9 +463,6 @@ main section{
     height: 100%;
     background-color: rgba(0, 0, 0, 0.699);
 }
-
-.modal-container{
-    position: fixed;
+.modal-container.active{
     display: block;
-    z-index: 9999;
 }
