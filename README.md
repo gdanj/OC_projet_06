@@ -1,5 +1,5 @@
 
-# Openclassroms Projet 4
+# Openclassroms Projet 6
 
 Réalisation d'un clone de netflix qui fait des requettes à une API REST
 
