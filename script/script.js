@@ -18,17 +18,25 @@ class Carousel {
     this.categories_movies_nbr_columns = 2
   }
 
+  /*
+  Transforme le json de l'API en objet
+  Stoque la nouvelle URL dans nextUrl
+  Ajoute chaque résultats de l'API dans le tableau tabResultApi si elle est differente à image du film en couverture
+  */
   async jsonData(response) {
     let apiMovie = await response.json()
     this.nextUrl["url"] = apiMovie['next']
-    for (let elem of apiMovie['results']){
-      if (elem['id'] !== 1508669){
+    for (let elem of apiMovie['results']) {
+      if (elem['id'] !== 1508669) {
         this.tabResultApi.push(elem)
       }
     }
     return true
   }
 
+  /*
+  Lance une requête Get à l'API si URL n'est pas dans le tabUrl
+  */
   async xhrApiMovie(url) {
     if (this.tabUrl.includes(url)) {
       return false
@@ -39,6 +47,11 @@ class Carousel {
     })
   }
 
+  /*
+  Fait un appel API de élément passé en paramettre
+  Les informations retournées par l'API ont les mêmes noms que les classes de la modale
+  Les noms dans le tableau tab servent d'abord à rechercher les classe de la modale, puis à les compléter
+  */
   async addText(elem, modal_container) {
     let tab = ["title", "year", "duration", "imdb_score", "votes", "original_title", "countries", "genres", "actors", "description", "directors", "writers", "company", "languages"]
     await fetch(`http://localhost:8000/api/v1/titles/${elem.dataset["movie"]}`).then(dataJson => {
@@ -47,9 +60,9 @@ class Carousel {
           let element = modal_container.querySelector(`.modal .${classs}`)
           if (classs === "duration") {
             element.innerText = `${parseInt(data[classs] / 60)}h${data[classs] % 60 > 9 ? data[classs] % 60: `0${data[classs] % 60}`}`
-          }else if(Array.isArray(data[classs])) {
+          } else if (Array.isArray(data[classs])) {
             element.innerText = data[classs].toString().replaceAll(',', ', ')
-          }else {
+          } else {
             element.innerText = data[classs]
           }
         }
@@ -58,6 +71,11 @@ class Carousel {
     })
   }
 
+  /*
+  prendre en paramettre un tableau elements html et un index
+  les div qui sont dans le tableau seront complétés par une image provenant de tabResultApi
+  à partir de l'index i
+  */
   async addDivInHtml(i, tabDiv) {
     for (let elem of tabDiv) {
       if (elem.querySelector('img')) {
@@ -86,6 +104,9 @@ class Carousel {
     }
   }
 
+  /*
+  Calcule et retourne la possition du premier élément
+  */
   calcPos(nbr) {
     this.currentPosition = this.currentPosition >= this.maxPosition ? this.currentPosition - this.maxPosition - 1 : this.currentPosition
     this.currentPosition = 0 > this.currentPosition ? this.maxPosition + 1 + this.currentPosition : this.currentPosition
@@ -96,6 +117,12 @@ class Carousel {
     return (nbr + this.currentPosition)
   }
 
+
+  /*
+  moviesDiv3 qui est la div du centrale du carroussel, et qui est remplit en par des div en fonction de la taille
+  de l'ecran, copie sont contenue dans les 4 autre div du carrousel afin d'avoir le meme nombre de div partout.
+  Puis la position de la la premiere image de la div principale est envoyer à addDivInHtml.
+  */
   async replaceImg() {
     this.moviesDiv1.innerHTML = this.moviesDiv3.innerHTML
     this.moviesDiv2.innerHTML = this.moviesDiv3.innerHTML
@@ -107,12 +134,15 @@ class Carousel {
     let tabDiv4 = this.moviesDiv4.querySelectorAll('div')
     let tabDiv5 = this.moviesDiv5.querySelectorAll('div')
     await this.addDivInHtml(this.calcPos(0), tabDiv3)
-    this.addDivInHtml(this.calcPos(tabDiv3.length), tabDiv4)
+    await this.addDivInHtml(this.calcPos(tabDiv3.length), tabDiv4)
     this.addDivInHtml(this.calcPos(-tabDiv3.length), tabDiv2)
     this.addDivInHtml(this.calcPos((2 * tabDiv3.length)), tabDiv5)
     this.addDivInHtml(this.calcPos(-(2 * tabDiv3.length)), tabDiv1)
   }
 
+  /*
+  Change le nombre de collone de la grid des 5 div qui compose le carrousel
+  */
   replaceCssGrid(categories_movies_nbr_columns) {
     this.moviesDiv1.style.gridTemplateColumns = `repeat(${categories_movies_nbr_columns}, 1fr)`
     this.moviesDiv2.style.gridTemplateColumns = `repeat(${categories_movies_nbr_columns}, 1fr)`
@@ -121,6 +151,12 @@ class Carousel {
     this.moviesDiv5.style.gridTemplateColumns = `repeat(${categories_movies_nbr_columns}, 1fr)`
   }
 
+  /*
+  change le nombre de div dans moviesDiv3 en fonction de la taille de l'ecran
+  tant que les div sont plus grandes que 250px une div est ajouté,
+  tant que les div sont plus petite que 150px une div est supprimé
+  Puis replaceImg est appellé
+  */
   resizeDivMovies() {
     let i = this.moviesDiv3.querySelectorAll('div').length
     let div = this.moviesDiv3.querySelector('div')
@@ -152,7 +188,7 @@ class Carousel {
     this.categoriesDiv.classList.remove("carousel-active-left")
   }
 
-  buttonLeftVisible(){
+  buttonLeftVisible() {
     this.categoriesDiv.parentElement.querySelector(".left").style.visibility = "visible"
     this.moviesDiv2.querySelector("div:last-child").style.visibility = "visible"
   }
@@ -161,6 +197,9 @@ class Carousel {
     const mmm = setTimeout(() => this.remouveClass(), 800)
   }
 
+  /*
+  initialise les evenements et appel la methode resizeDivMovies()
+  */
   eventCarrossel = () => {
     this.buttonRight.addEventListener('click', () => {
       if (!((this.categoriesDiv.classList.contains("carousel-active-right") || this.categoriesDiv.classList.contains("carousel-active-left")))) {
@@ -170,7 +209,6 @@ class Carousel {
         this.buttonLeftVisible()
       }
     })
-    
     this.buttonLeft.addEventListener('click', () => {
       if (!((this.categoriesDiv.classList.contains("carousel-active-right") || this.categoriesDiv.classList.contains("carousel-active-left")))) {
         this.categoriesDiv.classList.add("carousel-active-left")
@@ -190,10 +228,13 @@ class Carousel {
 
 let tabEventHeader = document.querySelectorAll(".modal-info")
 tabEventHeader.forEach(elem => elem.addEventListener("click", () => {
-    addText(elem, modal_container)
-    modal_container.classList.toggle("active")
+  addText(elem, modal_container)
+  modal_container.classList.toggle("active")
 }))
 
+/*
+  change les informations de la modale en fonction des paramettre
+*/
 async function addText(elem, modal_container) {
   let tab = ["title", "year", "duration", "imdb_score", "votes", "original_title", "countries", "genres", "actors", "description", "directors", "writers", "company", "languages"]
   await fetch(`http://localhost:8000/api/v1/titles/${elem.dataset["movie"]}`).then(dataJson => {
@@ -217,6 +258,10 @@ modal_trigger.forEach(elem => elem.addEventListener("click", (e) => {
   modal_container.classList.toggle("active")
 }))
 
+
+/*
+cree une instance de la class Carousel pour chaque element du tableau categoriesAll
+*/
 categoriesAll = document.querySelectorAll(".categories-movies")
 let i = 1
 for (let elem of categoriesAll) {
